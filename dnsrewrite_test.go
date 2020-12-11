@@ -42,6 +42,12 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 |disable_all_alt_syntax^$dnsrewrite=127.0.0.1
 |disable_all_alt_syntax^$dnsrewrite=127.0.0.2
 @@||disable_all_alt_syntax^$dnsrewrite=
+
+@@||blocked_later^$dnsrewrite
+||blocked_later^
+
+@@||etc_hosts_rule^$dnsrewrite
+127.0.0.1 etc_hosts_rule
 `
 
 	ruleStorage := newTestRuleStorage(t, 1, rulesText)
@@ -58,7 +64,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 		assert.False(t, ok)
 
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 1, len(dnsr)) {
+		if assert.Len(t, dnsr, 1) {
 			nr := dnsr[0]
 			assert.Equal(t, dns.RcodeSuccess, nr.DNSRewrite.RCode)
 			assert.Equal(t, dns.TypeA, nr.DNSRewrite.RRType)
@@ -71,7 +77,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 		assert.False(t, ok)
 
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 2, len(dnsr)) {
+		if assert.Len(t, dnsr, 2) {
 			nr := dnsr[0]
 			assert.Equal(t, dns.RcodeSuccess, nr.DNSRewrite.RCode)
 			assert.Equal(t, dns.TypeA, nr.DNSRewrite.RRType)
@@ -89,7 +95,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 		assert.False(t, ok)
 
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 1, len(dnsr)) {
+		if assert.Len(t, dnsr, 1) {
 			nr := dnsr[0]
 			assert.Equal(t, dns.RcodeSuccess, nr.DNSRewrite.RCode)
 			assert.Equal(t, dns.TypeA, nr.DNSRewrite.RRType)
@@ -102,7 +108,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 		assert.False(t, ok)
 
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 2, len(dnsr)) {
+		if assert.Len(t, dnsr, 2) {
 			nr := dnsr[0]
 			assert.Equal(t, dns.RcodeSuccess, nr.DNSRewrite.RCode)
 			assert.Equal(t, dns.TypeA, nr.DNSRewrite.RRType)
@@ -120,7 +126,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 		assert.False(t, ok)
 
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 1, len(dnsr)) {
+		if assert.Len(t, dnsr, 1) {
 			nr := dnsr[0]
 			assert.Equal(t, dns.RcodeSuccess, nr.DNSRewrite.RCode)
 			assert.Equal(t, dns.TypeAAAA, nr.DNSRewrite.RRType)
@@ -133,7 +139,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 		assert.False(t, ok)
 
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 2, len(dnsr)) {
+		if assert.Len(t, dnsr, 2) {
 			nr := dnsr[0]
 			assert.Equal(t, dns.RcodeSuccess, nr.DNSRewrite.RCode)
 			assert.Equal(t, dns.TypeAAAA, nr.DNSRewrite.RRType)
@@ -151,7 +157,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 		assert.False(t, ok)
 
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 1, len(dnsr)) {
+		if assert.Len(t, dnsr, 1) {
 			nr := dnsr[0]
 			assert.Equal(t, dns.RcodeSuccess, nr.DNSRewrite.RCode)
 			assert.Equal(t, dns.TypeAAAA, nr.DNSRewrite.RRType)
@@ -164,7 +170,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 		assert.False(t, ok)
 
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 2, len(dnsr)) {
+		if assert.Len(t, dnsr, 2) {
 			nr := dnsr[0]
 			assert.Equal(t, dns.RcodeSuccess, nr.DNSRewrite.RCode)
 			assert.Equal(t, dns.TypeAAAA, nr.DNSRewrite.RRType)
@@ -182,7 +188,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 		assert.False(t, ok)
 
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 1, len(dnsr)) {
+		if assert.Len(t, dnsr, 1) {
 			nr := dnsr[0]
 			assert.Equal(t, dns.RcodeRefused, nr.DNSRewrite.RCode)
 		}
@@ -193,7 +199,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 		assert.False(t, ok)
 
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 1, len(dnsr)) {
+		if assert.Len(t, dnsr, 1) {
 			nr := dnsr[0]
 			assert.Equal(t, "othercname", nr.DNSRewrite.NewCNAME)
 		}
@@ -204,7 +210,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 		assert.False(t, ok)
 
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 1, len(dnsr)) {
+		if assert.Len(t, dnsr, 1) {
 			nr := dnsr[0]
 			assert.Equal(t, dns.RcodeSuccess, nr.DNSRewrite.RCode)
 			assert.Equal(t, dns.TypeTXT, nr.DNSRewrite.RRType)
@@ -222,7 +228,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 		assert.False(t, ok)
 
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 1, len(dnsr)) {
+		if assert.Len(t, dnsr, 1) {
 			nr := dnsr[0]
 			assert.Equal(t, dns.RcodeRefused, nr.DNSRewrite.RCode)
 		}
@@ -242,7 +248,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 
 		var allowListCase *rules.NetworkRule
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 3, len(dnsr)) {
+		if assert.Len(t, dnsr, 3) {
 			for _, r := range dnsr {
 				if r.Whitelist {
 					allowListCase = r
@@ -264,7 +270,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 
 		var allowListCase *rules.NetworkRule
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 3, len(dnsr)) {
+		if assert.Len(t, dnsr, 3) {
 			for _, r := range dnsr {
 				if r.Whitelist {
 					allowListCase = r
@@ -283,7 +289,7 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 
 		var allowListCase *rules.NetworkRule
 		dnsr := res.DNSRewrites()
-		if assert.Equal(t, 3, len(dnsr)) {
+		if assert.Len(t, dnsr, 3) {
 			for _, r := range dnsr {
 				if r.Whitelist {
 					allowListCase = r
@@ -293,6 +299,32 @@ func TestDNSEngine_MatchRequest_dnsRewrite(t *testing.T) {
 
 		if assert.NotNil(t, allowListCase) {
 			assert.Equal(t, &rules.DNSRewrite{}, allowListCase.DNSRewrite)
+		}
+	})
+
+	t.Run("blocked_later", func(t *testing.T) {
+		res, ok := dnsEngine.Match("blocked_later")
+		assert.True(t, ok)
+		if assert.NotNil(t, res.NetworkRule) {
+			assert.Equal(t, "||blocked_later^", res.NetworkRule.RuleText)
+		}
+
+		dnsr := res.DNSRewrites()
+		if assert.Len(t, dnsr, 1) {
+			assert.True(t, dnsr[0].Whitelist)
+		}
+	})
+
+	t.Run("etc_hosts_rule", func(t *testing.T) {
+		res, ok := dnsEngine.Match("etc_hosts_rule")
+		assert.True(t, ok)
+		if assert.Len(t, res.HostRulesV4, 1) {
+			assert.Equal(t, "127.0.0.1 etc_hosts_rule", res.HostRulesV4[0].RuleText)
+		}
+
+		dnsr := res.DNSRewrites()
+		if assert.Len(t, dnsr, 1) {
+			assert.True(t, dnsr[0].Whitelist)
 		}
 	})
 }

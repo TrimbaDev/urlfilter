@@ -218,8 +218,29 @@ func removeBadfilterRules(rules []*NetworkRule) []*NetworkRule {
 	return rules
 }
 
+// removeDNSRewriteRules removes DNS rewrite rules from rules and
+// returns the filtered slice or the original slice if there were none.
 func removeDNSRewriteRules(rules []*NetworkRule) (filtered []*NetworkRule) {
-	for _, r := range rules {
+	// Assume that DNS rewrite rules are rare, and return the
+	// original slice if there are none.
+
+	var i int
+	var found bool
+	for i = range rules {
+		if rules[i].DNSRewrite != nil {
+			found = true
+
+			break
+		}
+	}
+
+	if !found {
+		return rules
+	}
+
+	filtered = rules[:i:i]
+	for ; i < len(rules); i++ {
+		r := rules[i]
 		if r.DNSRewrite == nil {
 			filtered = append(filtered, r)
 		}
